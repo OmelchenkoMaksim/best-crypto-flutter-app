@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 final darkTheme = ThemeData(
     // scaffoldBackgroundColor это применение бэкрграунда ко всем виджетам темы
-    appBarTheme: const AppBarTheme(backgroundColor: Colors.blue),
+    appBarTheme: const AppBarTheme(elevation: 0, backgroundColor: Colors.blue),
     scaffoldBackgroundColor: Colors.lightGreenAccent,
     dividerColor: Colors.white24,
     listTileTheme: const ListTileThemeData(iconColor: Colors.white),

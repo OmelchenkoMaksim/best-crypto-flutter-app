@@ -1,25 +1,27 @@
+import 'package:crypto_coins_list/repositories/crypto_coins/models/crypto_coin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CryptoCoinTile extends StatelessWidget {
-  const CryptoCoinTile({super.key, required this.coinName});
+  const CryptoCoinTile({Key? key, required this.coin}) : super(key: key);
 
-  final String coinName;
+  final CryptoCoin coin;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return ListTile(
-      leading: SvgPicture.asset(
-        'assets/svg/bitcoin-btc-logo.svg',
-        height: 45,
-      ),
+      leading: Image.network(coin.imageUrl),
+      // SvgPicture.asset(
+      //   'assets/svg/bitcoin-btc-logo.svg',
+      //   height: 45,
+      // ),
       // боди медиум и лейбл смол мы создали в теме и оттуда юзаем
       title: Text(
-        coinName,
+        coin.name,
         style: theme.textTheme.bodyMedium,
       ),
-      subtitle: Text('2000550\$', style: theme.textTheme.labelSmall),
+      subtitle:
+          Text('${coin.priceInUSD} \$', style: theme.textTheme.labelSmall),
       trailing: const Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
       onTap: ()
           // { первый вариант навигации
@@ -29,7 +31,7 @@ class CryptoCoinTile extends StatelessWidget {
           {
         Navigator.of(context)
             .pushNamed('/coin', // второй вариант навигации (корректный)
-                arguments: coinName);
+                arguments: coin);
       },
     );
   }

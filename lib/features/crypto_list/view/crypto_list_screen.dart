@@ -1,5 +1,8 @@
 import 'package:crypto_coins_list/features/crypto_list/widgets/crypto_coin_tile.dart';
+import 'package:crypto_coins_list/repositories/crypto_coins/crypto_coins_repository.dart';
 import 'package:flutter/material.dart';
+
+import '../../../repositories/crypto_coins/models/crypto_coin.dart';
 
 class CryptoListScreen extends StatefulWidget {
   const CryptoListScreen({super.key});
@@ -9,6 +12,14 @@ class CryptoListScreen extends StatefulWidget {
 }
 
 class _CryptoListScreenState extends State<CryptoListScreen> {
+  List<CryptoCoin>? _cryptoCoinsList;
+
+  @override
+  void initState() {
+    _loadCryptoCoins();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // скаффолд это виджет который используется как отдельный экран (это не прям экран а что то вроде контейнера)
@@ -19,23 +30,39 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
           'CryptoListScreen',
         ),
       ),
-      // центральная часть виджета-контейнера можно через билдер, а что бы бить список на части
-      // используем сепарейтед
-      // body: ListView.builder(
-      body: ListView.separated(
-        itemCount: 10,
-        // separatorBuilder нужен для  ListView.separated
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
-          const coinName = 'BITOC';
-          return const CryptoCoinTile(coinName: coinName);
-        },
-      ),
+      body: (_cryptoCoinsList == null)
+
+          // ? const SizedBox()
+          ? const Center(child: CircularProgressIndicator())
+          :
+          // центральная часть виджета-контейнера можно через билдер, а что бы бить список на части
+          // используем сепарейтед
+          // body: ListView.builder(
+          ListView.separated(
+              padding: const EdgeInsets.only(top: 16),
+              itemCount: _cryptoCoinsList!.length, // !. - bang operator
+              // separatorBuilder нужен для  ListView.separated
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                final coin = _cryptoCoinsList![index];
+                return CryptoCoinTile(coin: coin);
+              },
+            ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: _incrementCounter,
       //   tooltip: 'Increment',
       //   child: const Icon(Icons.add),
       // ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.download),
+          onPressed: () async {
+            await _loadCryptoCoins();
+          }),
     );
+  }
+
+  Future<void> _loadCryptoCoins() async {
+    _cryptoCoinsList = await CryptoCoinsRepository().getCoinsList();
+    setState(() {});
   }
 }
