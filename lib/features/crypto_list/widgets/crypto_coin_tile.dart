@@ -2,7 +2,7 @@ import 'package:crypto_coins_list/repositories/crypto_coins/models/crypto_coin.d
 import 'package:flutter/material.dart';
 
 class CryptoCoinTile extends StatelessWidget {
-  const CryptoCoinTile({Key? key, required this.coin}) : super(key: key);
+  const CryptoCoinTile({super.key, required this.coin});
 
   final CryptoCoin coin;
 
